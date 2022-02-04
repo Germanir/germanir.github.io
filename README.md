@@ -9,6 +9,6 @@ Exemplo de formulário CSS/HTML sem a utilização de DIVS.
   <img alt="Made by Germanir" src="https://github.com/Germanir/germanir.github.io/blob/main/form-sem-div/imgs/css-form-sem-div-snap.png?raw=true">
 </a>
 
-Feito Germanir Leal 👋🏽 [Entre em contato!](germanirleal@yahoo.com.br)
+Feito Germanir Leal 👋🏽 [Entre em contato!](mailto:germanirleal@yahoo.com.br)
 
 

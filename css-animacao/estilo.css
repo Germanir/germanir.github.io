@@ -1,0 +1,78 @@
+@import url(https://fonts.googleapis.com/css?family=Rubik);
+
+html {
+    background-color: #000000;
+}
+
+body {
+
+  margin:0;
+  padding: 0;
+  color: white;
+
+
+}
+main {
+    height: 80vh;
+    
+}
+
+div {
+    width: 10vw;
+    height: 10vw;
+}
+
+#primeiro {
+
+    background: linear-gradient(to left,red,yellow);
+    position: absolute;
+    animation: esquerda-direita 3s;
+    animation-iteration-count: infinite;
+}
+
+#segundo {
+
+    background: linear-gradient(to left,green, cyan );
+    margin-top: 20vh;   
+    margin-left: 60vw;
+    position: absolute;
+    animation: cima-baixo 3s;
+    animation-iteration-count: infinite;
+
+}
+
+
+#terceiro {
+
+    background-color: yellow;
+    margin-top: 50vh;
+    margin-left: 1vw;
+    position: absolute;
+
+}
+
+#terceiro:hover {
+
+    background-color: purple;
+    margin-top: 50vh;
+    margin-left: 1vw;
+    position: absolute;
+    border-radius: 10vw;
+
+}
+
+@keyframes esquerda-direita {
+
+    0% {left: 0px;}
+    50% {left: 90vw;}
+    100% {left: 0px; }
+    
+}
+
+@keyframes cima-baixo {
+
+    0% {top: 20vh;}
+    50% {top: 0vh;}
+    100% {top: 20vh; }
+    
+}

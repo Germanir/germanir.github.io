@@ -1,0 +1,38 @@
+body {
+    background-color: cadetblue;
+    margin: 0;
+    padding: 0;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+ }
+.principal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    background-color: #ffffff;
+    width: 50vw;
+    text-align: center;
+
+} 
+
+#imagemBandeira {
+    width: 300px;
+    object-fit: cover;
+}
+
+#imagemEscudo {
+    display: none;
+}
+
+@media (max-width: 600px) {
+
+    #imagemBandeira{
+        display: none;
+    }
+    #imagemEscudo {
+        display: block;
+    }
+
+} /*  End Média */
+
+

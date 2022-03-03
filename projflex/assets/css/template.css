@@ -2,6 +2,10 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
+html {
+    font-size: 6.25%;
+}
+
 body{
     margin: 0px;
     padding: 0px;
@@ -287,3 +291,46 @@ footer{
     padding-left: 300px;
 
 }
+
+.widget_body {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  
+}
+
+.item-departs{
+    width: 100px;
+    height: 100px;
+    background: #2b4c99;
+    margin:  5px;
+    color: #FFF;
+    font-size: 15rem;
+    display: flex;
+    
+}
+.item-departs h6:hover{
+    display: none;
+    
+}
+
+.item-departs h6{
+font-size: 100rem;
+margin: 0;
+padding: 0;
+text-align: center;
+}
+
+.item-departs:hover{
+    background-color: #33aae1;
+}
+
+.item-departs p {
+  
+    align-items: center;
+    font-size: 10rem;
+    width: 100%;
+    height: 100%;
+}
+
+

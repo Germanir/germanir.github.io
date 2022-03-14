@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    input {
+        display: block;
+    }
+
+    h1 {
+        font-size: 16px;
+        margin-bottom: 0px;
+        margin-bottom: 6px;
+    }
+
+    span {
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+        color: darkblue;
+    }
+
+    p {
+        margin: 0px;
+    }
+
+    body {
+        width: 60%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .questao {
+        background-color: #e0f7faa1;
+        padding: 1px 0px 10px 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+
+    }
+
+    .questao:hover {
+        background-color: #e0f7fa;
+    }
+
+    input[type=button] {
+        margin-top: 10px;
+    }
+</style>
+<script>
+    function ready(callback){
+        document.addEventListener("DOMContentLoaded",callback);
+    }
+
+    function questao1 () {
+            let nota1 = parseInt(document.getElementById("1.nota1").value);
+            let nota2 = parseInt(document.getElementById("1.nota2").value);
+            let nota3 = parseInt(document.getElementById("1.nota3").value);
+
+            let res = document.getElementById("res1");
+            res.innerHTML = "Resultado: A média das 3 notas foi " + ((nota1 + nota1 + nota3)/3) + ".";
+                        
+    }// end questão1
+
+    
+    function questao2 (){
+        let senha = document.getElementById("2.senha").value;
+        let res = document.getElementById("res2");
+
+        if (senha === "2002"){
+            res.innerHTML = "Resultado: acesso permitido";
+        }else {
+            res.innerHTML = "Resultado: senha inválida";
+        }
+        
+
+    }// end questão2
+
+    function questao3 () {
+        let valor = parseFloat(document.getElementById("3.valor").value);
+        let res = document.getElementById("res3");
+
+        
+
+        if (valor <= 25){
+            res.innerHTML = "Resultado: O valor digitado esta no intervalo [0,25]."
+        }else if (valor <= 50){
+            res.innerHTML = "Resultado: O valor digitado esta no intervalo [25,50]."
+        }else if (valor <= 75){
+            res.innerHTML = "Resultado: O valor digitado esta no intervalo [50,75]."
+        }else if (valor <= 100){
+            res.innerHTML = "Resultado: O valor digitado esta no intervalo [75,100]."
+        }
+
+    } // end questão3
+
+    function questao4 () {
+        let valor = parseFloat(document.getElementById("4.salario").value);
+        let res = document.getElementById("res4");
+
+        if (valor <= 400){
+           res.innerHTML = "Resultado: Novo salario: " + (valor * 1.15) +  ", Ganho: " + ((valor * 1.15)-valor) + ", Percentual: 15%"
+        }else if (valor <= 800){
+            res.innerHTML = "Resultado: Novo salario: " + (valor * 1.12) +  ", Ganho: " + ((valor * 1.12)-valor) + ", Percentual: 12%"
+        }else if (valor <= 1200){
+            res.innerHTML = "Resultado: Novo salario: " + (valor * 1.10) +  ", Ganho: " + ((valor * 1.10)-valor) + ", Percentual: 10%"
+        }else if (valor <= 2000){
+            res.innerHTML = "Resultado: Novo salario: " + (valor * 1.07) +  ", Ganho: " + ((valor * 1.07)-valor) + ", Percentual: 7%"
+        }else if (valor > 2000){
+            res.innerHTML = "Resultado: Novo salario: " + (valor * 1.04) +  ", Ganho: " + ((valor * 1.04)-valor) + ", Percentual: 4%"
+        }
+
+    } // end questão4
+
+    function questao5 () {
+        let valor = parseFloat(document.getElementById("5.salario").value);
+        let res = document.getElementById("res5");
+        let resv = 0.0;
+
+        if (valor <= 2000){
+           res.innerHTML = "Resultado: Imposto isento";
+        }else if (valor <= 3000){
+           res.innerHTML = "Resultado: Imposto R$" + ((valor) * 0.08);
+        }else if (valor <= 4500){
+           res.innerHTML = "Resultado: Imposto R$" + ((valor) * 0.18);
+        }else if (valor > 4500){
+           res.innerHTML = "Resultado: Imposto R$" + ((valor) * 0.28);
+
+        }
+
+               
+
+
+
+
+res.innerHTML = "Resultado: Imposto R$" + resv;
+
+        }
+
+
+        /*function valorPorFaixa(valor) {
+            let res = 0.0;
+            if (valor <= 2000){
+           res = 0.0;
+        }else if (valor <= 3000){
+            res = (valor * 0.08);
+        }else if (valor <= 4500){
+            res = (valor * 0.18);
+        }else if (valor > 4500){
+           res =  (valor * 0.28);
+        }
+
+
+            return res;
+        }*/
+
+    } // end questão4
+
+
+
+    ready(function () {
+
+    var calcular1 = document.getElementById("1.calcular");
+    var calcular2 = document.getElementById("2.calcular");
+    var calcular3 = document.getElementById("3.calcular");
+    var calcular4 = document.getElementById("4.calcular");
+    var calcular5 = document.getElementById("5.calcular");
+    
+
+    calcular1.addEventListener("click",questao1);
+    calcular2.addEventListener("click", questao2);
+    calcular3.addEventListener("click", questao3);
+    calcular4.addEventListener("click", questao4);
+    calcular5.addEventListener("click", questao5);
+   
+    
+      
+
+
+        
+
+
+
+
+    }); // end ready
+</script>
+
+<body>
+    <div id="corpo">
+        <div class="questao">
+            <h1>Questã 01:<span>Calcular a média ponderada de 3 notas
+                    <a href="https://www.urionlinejudge.com.br/judge/pt/problems/view/1006"
+                        target="_blank">detalhar</a></span></h1>
+            <p id="res1">Resultado: A média das 3 notas foi xx.</p>
+            <label for="">Nota 01:</label>
+            <input type="text" id="1.nota1">
+            <label for="">Nota 02:</label>
+            <input type="text" id="1.nota2">
+            <label for="">Nota 03:</label>
+            <input type="text" id="1.nota3">
+            <input type="button" value="Calcular" id="1.calcular">
+        </div>
+        <div class="questao">
+            <h1>Questã 02:<span> Senha Fixa <a href="https://www.urionlinejudge.com.br/judge/pt/problems/view/1114"
+                        target="_blank">detalhar</a></span></h1>
+            <p id="res2">Resultado: xxxxx</p>
+            <label for="">Digite a senha:</label>
+            <input type="password" id="2.senha">
+            <input type="button" value="Calcular" id="2.calcular">
+        </div>
+        <div class="questao">
+            <h1>Questã 03:<span> Intervalo [0,25], [25,50], [50,75], [75,100] <a
+                        href="https://www.urionlinejudge.com.br/judge/pt/problems/view/1037"
+                        target="_blank">detalhar</a></span></h1>
+            <p id="res3">Resultado: O valor digita esta no intervalo [xx,xx].</p>
+            <label for="">Valor:</label>
+            <input type="text" id="3.valor">
+            <input type="button" value="Calcular" id="3.calcular">
+        </div>
+        <div class="questao">
+            <h1>Questã 04:<span> Aumento de Salário <a
+                        href="https://www.urionlinejudge.com.br/judge/pt/problems/view/1048"
+                        target="_blank">detalhar</a></span></h1>
+            <p id="res4">Resultado: Novo salario: xx.xx, Ganho: xx.xx, Percentual: xx%</p>
+            <label for="">Salário atual:</label>
+            <input type="text" id="4.salario">
+            <input type="button" value="Calcular" id="4.calcular">
+        </div>
+        <div class="questao">
+            <h1>Questã 05:<span> Imposto de Renda <a
+                        href="https://www.urionlinejudge.com.br/judge/pt/problems/view/1051"
+                        target="_blank">detalhar</a></span></h1>
+            <p id="res5">Resultado:Imposto xxxxx</p>
+            <label for="">Renda:</label>
+            <input type="text" id="5.salario">
+            <input type="button" value="Calcular" id="5.calcular">
+        </div>
+        <div class="questao">
+            <h1>Questã 06:<span> Calcular o salário de um funcionário <a
+                        href="https://www.urionlinejudge.com.br/repository/UOJ_1008.html" target="_blank">detalhar</a></span></h1>
+            <p id="">Resultado: O funcionario xxxxxx vai receber xxx.</p>
+            <label for="">Nome Funcionário</label>
+            <input type="text" id="">
+            <label for="">Valor Hora</label>
+            <input type="text" id="">
+            <label for="">Total de Horas Trabalhado</label>
+            <input type="text" id="">
+            <input type="button" value="Calcular">
+        </div>
+        <div class="questao">
+            <h1>Questã 07:<span> Calcular o consumo médio de um automóvel <a
+                        href="https://www.urionlinejudge.com.br/repository/UOJ_1014.html" target="_blank">detalhar</a></span></h1>
+            <p id="">Resultado: O automóvel fez o consumo médio de xxx.</p>
+            <label for="">Distância percorrida</label>
+            <input type="text" id="">
+            <label for="">Combustível gasto</label>
+            <input type="text" id="">
+            <input type="button" value="Calcular">
+        </div>
+    </div>
+</body>
+
+</html>

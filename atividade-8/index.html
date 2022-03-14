@@ -133,8 +133,28 @@
 
         }
 
-    }
+    } //end questão 5
 
+    function questao6 () {
+
+        let nome = document.getElementById("6.nome").value;
+        let vhora = parseFloat(document.getElementById("6.valor_hora").value);
+        let thora = parseFloat(document.getElementById("6.total_horas").value);
+        let res = document.getElementById("res6");
+
+        res.innerHTML = "O funcionario " + nome + " vai receber R$" + (vhora * thora)  + " .";
+
+    } // end questão 6
+
+    function questao7 () {
+        let res = document.getElementById("res7");
+        let distancia = parseFloat(document.getElementById("7.distancia").value);
+        let valor = parseFloat(document.getElementById("7.valor").value);
+
+        res.innerHTML = "O automóvel fez o consumo médio de "  + (distancia / valor) + " KM/L.";
+
+
+    } // end questão 7
 
 
     ready(function () {
@@ -144,6 +164,8 @@
     var calcular3 = document.getElementById("3.calcular");
     var calcular4 = document.getElementById("4.calcular");
     var calcular5 = document.getElementById("5.calcular");
+    var calcular6 = document.getElementById("6.calcular");
+    var calcular7 = document.getElementById("7.calcular");
     
 
     calcular1.addEventListener("click",questao1);
@@ -151,15 +173,10 @@
     calcular3.addEventListener("click", questao3);
     calcular4.addEventListener("click", questao4);
     calcular5.addEventListener("click", questao5);
+    calcular6.addEventListener("click", questao6);
+    calcular7.addEventListener("click", questao7);
    
     
-      
-
-
-        
-
-
-
 
     }); // end ready
 </script>
@@ -217,24 +234,24 @@
         <div class="questao">
             <h1>Questã 06:<span> Calcular o salário de um funcionário <a
                         href="https://www.urionlinejudge.com.br/repository/UOJ_1008.html" target="_blank">detalhar</a></span></h1>
-            <p id="">Resultado: O funcionario xxxxxx vai receber xxx.</p>
+            <p id="res6">Resultado: O funcionario xxxxxx vai receber xxx.</p>
             <label for="">Nome Funcionário</label>
-            <input type="text" id="">
+            <input type="text" id="6.nome">
             <label for="">Valor Hora</label>
-            <input type="text" id="">
+            <input type="text" id="6.valor_hora">
             <label for="">Total de Horas Trabalhado</label>
-            <input type="text" id="">
-            <input type="button" value="Calcular">
+            <input type="text" id="6.total_horas">
+            <input type="button" value="Calcular" id="6.calcular">
         </div>
         <div class="questao">
             <h1>Questã 07:<span> Calcular o consumo médio de um automóvel <a
                         href="https://www.urionlinejudge.com.br/repository/UOJ_1014.html" target="_blank">detalhar</a></span></h1>
-            <p id="">Resultado: O automóvel fez o consumo médio de xxx.</p>
+            <p id="res7">Resultado: O automóvel fez o consumo médio de xxx.</p>
             <label for="">Distância percorrida</label>
-            <input type="text" id="">
+            <input type="text" id="7.distancia">
             <label for="">Combustível gasto</label>
-            <input type="text" id="">
-            <input type="button" value="Calcular">
+            <input type="text" id="7.valor">
+            <input type="button" value="Calcular" id="7.calcular" >
         </div>
     </div>
 </body>

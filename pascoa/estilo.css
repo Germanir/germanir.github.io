@@ -1,0 +1,51 @@
+@font-face {
+    font-family: "Roboto";
+    src: local(Roboto), url(fonts/Roboto-Regular.ttf);  
+}
+
+html,body {
+    padding: 0;
+    margin: 0;
+   
+    font-family: "Roboto" !important;
+   }
+   
+   header {
+     background: #D2691E;
+     grid-area: header;
+     height: 15vh;
+     color: white;
+   }
+   
+   .menu {
+       display: block;
+       
+   }
+
+   
+   main {
+
+    height: 71vh;
+   
+   }
+   
+   footer {
+   background: #F4A460;
+   color: #8B4513;
+   display: block;
+   height: 10vh;
+}
+   
+   .principal {
+
+   }
+
+   .principal .blockquote-footer {
+       color: white;
+   }
+
+   p {
+   
+   }
+
+  

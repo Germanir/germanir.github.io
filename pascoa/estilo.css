@@ -24,8 +24,9 @@ html,body {
 
    
    main {
+       display: block;
 
-    height: 71vh;
+  
    
    }
    
@@ -44,8 +45,8 @@ html,body {
        color: white;
    }
 
-   p {
-   
+  .marcado {
+   background-color: #F4A460;
    }
 
   

@@ -15,7 +15,7 @@
     <script>
 
         $(document).ready(function(){
-
+          let produtosCarrinho = [];
           let produtos = JSON.parse('[\
     {\
         "id" : 1,\
@@ -56,6 +56,32 @@
                    
                 }
           }
+
+
+
+ function retornaProduto(id){
+
+        let produto = [];
+
+        for (const p of produtos) {
+
+                  
+            if (parseInt(p.id) == parseInt(id)) {
+
+              produto.id = p.id;
+              produto.produto = p.produto;
+              produto.descricao = p.descricao;
+              produto.valor = p.valor;
+              produto.foto = p.valor;
+
+              return produto;
+              
+              break;
+            } // end if
+
+        } // end for
+
+} // end function
 
 
           
@@ -169,13 +195,22 @@
            function montarCarrinho(){
             $("#confirmacao").find(".modal-body").html("");
 
+            produtosCarrinho = [];
+
             $("input[id$='.valorSelecionado']").each(function(){
               
                   if ($(this).val() != 0) {
 
                     let id = $(this).prop("id").replace(".valorSelecionado","");
 
-                    $("#confirmacao").find(".modal-body").append("<p>Produto Id <mark>" + id + "</mark></p>");
+                    let produto = retornaProduto(id);
+                    produto.total = $("#" + id + "\\.totalSelecionado").val();
+                    produto.quantidade = $("#" + id + "\\.valorSelecionado").val();
+
+                    produtosCarrinho.push(produto);
+
+
+                    $("#confirmacao").find(".modal-body").append("<p><mark>" + produto.produto + " : " + produto.descricao + "</mark> Valor Total: <mark>" + $("#" + id + "\\.totalSelecionado").val() +"</mark></p>");
 
                   }
 
@@ -190,6 +225,69 @@
             montarCarrinho();
 
           });
+
+          $("#simFinal").click(function(){
+
+            $("#confirmacao").modal('hide');
+
+                if (produtosCarrinho.length > 0){
+
+                        $("#cart").removeClass("btn-secondary");
+                        $("#cart").addClass("btn-success");
+
+                          
+                        $("#cart").append(`<span id="cartl">(${produtosCarrinho.length})</span>`);
+
+                        let montarTabela = "<table class='table table-info'><thead><tr><th>Produto</th><th>Total</th></tr><tbody>";
+
+                        for (const p of produtosCarrinho){
+
+                         montarTabela += `<tr><td>${p.descricao}</td><td>${p.total}</td></tr>`;
+
+                        }
+                        montarTabela += "</tbody></table>";
+
+
+                        $("#carrinho").find(".modal-body").html(montarTabela + 'Nome: <input type="text" id="nome" class="form-control">Telefone: <input class="form-control" type="text" id="telefone">');
+
+              }else {
+                        $("#cart").removeClass("btn-success");
+                        $("#cart").addClass("btn-secondary");
+                        $("#cartl").remove();
+
+              }
+
+          }); // end simFinal click
+
+
+          $("#enviarFinal").hover(function(){
+
+           let nome = $("#" + nome).val();
+           let telefone = $("#" + telefone).val();
+
+           if (nome.length)
+
+          });
+
+
+          $("#enviarFinal").click(function(){
+
+
+            let numero = $("#telefone").val();
+            let nome = $("#nome").val();
+            let pedido = `Olá meu nome é ${nome} (${numero}), desejo realizar o pedido abaixo:`;
+
+              for (const p of produtosCarrinho){
+                  pedido += `Produto_${p.id}_${p.descricao}_Qtde_${p.quantidade}`;
+              }
+
+              link = "https://wa.me/5561985355256?text=" + encodeURI(pedido);
+              window.open(link,'_blank');
+
+          });
+
+
+          
     
 
         }); // end ready
@@ -240,7 +338,7 @@
                       
                     </ul>
                     <form class="d-flex">
-                      <button class="btn btn-secondary" type="button">
+                      <button class="btn btn-secondary" type="button" id="cart" data-bs-toggle="modal" data-bs-target="#carrinho">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
                           <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
                         </svg>
@@ -364,11 +462,30 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary">Sim</button>
+        <button type="button" class="btn btn-primary" id="simFinal">Sim</button>
       </div>
     </div>
   </div>
 </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="carrinho" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Produtos selecionados</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="enviarFinal">Enviar pedido</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>

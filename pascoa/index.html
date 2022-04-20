@@ -101,11 +101,11 @@
             
 
             $("#listaProdutos").find("tbody").append(`<tr>\
-              <td><img src='imgs/${p.foto}'></td>\
+              <td><img src='imgs/${p.foto}' class='img-fluid'></td>\
               <td>${p.produto} : ${p.descricao}</td>\
               <td>${p.valor}</td>\
-              <td><input type='number' id='${p.id}.valorSelecionado' value='0' /></td>\
-              <td><input type='text' id='${p.id}.totalSelecionado' value='0' disabled=true /></td>\
+              <td><input type='number' id='${p.id}.valorSelecionado' value='0' class='form-control' disabled=true /></td>\
+              <td><input type='text' id='${p.id}.totalSelecionado' value='0' class='form-control' disabled=true /></td>\
                         <td>\
                           <button class='btn btn-success' id='${p.id}.add'>+</button>\
                           <button class='btn btn-danger' id='${p.id}.rem'>-</button>\
@@ -214,14 +214,25 @@
 
                   }
 
+
+
             });
 
+            if (produtosCarrinho.length <= 0){
+                  
+                $("#confirmacao").find(".modal-body").html("<p><mark>Nenhum produto selecionado</mark></p>");
+                $("#simFinal").prop("disabled",true);
+
+            }else{
+                $("#simFinal").prop("disabled",false);
+            }
 
           }// end function
 
 
           $("#preCart").hover(function() {
 
+            
             montarCarrinho();
 
           });
@@ -250,6 +261,18 @@
 
                         $("#carrinho").find(".modal-body").html(montarTabela + 'Nome: <input type="text" id="nome" class="form-control">Telefone: <input class="form-control" type="text" id="telefone">');
 
+
+                        $('html, body').animate({scrollTop: '0px'}, 300);
+                        $("#cart").hide(500);
+                        $("#cart").show(1000,function(){
+                          $(this).prepend("Carrinho atualizado");
+                          $(this).focus();
+                        });
+
+                        $(".card-header").filter(function(){
+                                  return $(this).text().trim().toLowerCase() === "produtos";
+                        }).find("input, button").prop('disabled',true);
+                        
               }else {
                         $("#cart").removeClass("btn-success");
                         $("#cart").addClass("btn-secondary");
@@ -262,16 +285,55 @@
 
           $("#enviarFinal").hover(function(){
 
-           let nome = $("#" + nome).val();
-           let telefone = $("#" + telefone).val();
+           let nome = $("#nome").val();
+           let telefone = $("#telefone").val();
 
-           if (nome.length)
+                  if (nome.length == 0){
+                    $("#enviarFinal").prop("disabled",true);
+                    $("#nome").css("border", "2px solid red");
+
+                  } // end nome
+
+                  if (telefone.length == 0){
+                    $("#enviarFinal").prop("disabled",true);
+                    $("#telefone").css("border", "2px solid red");
+
+                  } // end nome
+                  
+
+          }); // end hover
+
+
+$("html").on("hover, blur","#nome, #telefone, #carrinho", function() {
+
+            let nome = $("#nome").val();
+           let telefone = $("#telefone").val();
+
+                  if (nome.length == 0){
+                    $("#enviarFinal").prop("disabled",true);
+                    $("#nome").css("border", "2px solid red");
+
+                  }else {
+                    $("#enviarFinal").prop("disabled",false);
+                    $("#nome").css("border", "2px solid green");
+                  } // end nome
+
+                  if (telefone.length == 0){
+                    $("#enviarFinal").prop("disabled",true);
+                    $("#telefone").css("border", "2px solid red");
+
+                  } else {
+                    $("#enviarFinal").prop("disabled",false);
+                    $("#telefone").css("border", "2px solid green"); 
+                  }// end nome
+
 
           });
 
 
           $("#enviarFinal").click(function(){
 
+            $("#carrinho").modal("hide");
 
             let numero = $("#telefone").val();
             let nome = $("#nome").val();
@@ -284,11 +346,25 @@
               link = "https://wa.me/5561985355256?text=" + encodeURI(pedido);
               window.open(link,'_blank');
 
+              $(".card-header").filter(function(){
+                    return $(this).text().trim().toLowerCase() === "produtos";
+              }).parent().parent().parent().css({"background":"green","color":"white"})
+              .prepend('<p class="text-center"><br><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-check" viewBox="0 0 16 16">  <path fill-rule="evenodd" d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>   <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/></svg><br>Obrigado pelo pedido!</p>');
+
+
+$("#cart").removeClass("btn-success");
+$("#cart").addClass("btn-secondary");
+$("#cartl").remove();
+$("#cart").html('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16"><path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"></path></svg>')
+
+
+carregarInicial();          
+
           });
 
 
           
-    
+
 
         }); // end ready
 
@@ -352,6 +428,7 @@
 
 
         <main>
+          <p></p>
 <div class="container">
   <div class="row">
 
@@ -368,7 +445,7 @@
                       <th>Foto</th>
                       <th>Descrição</th>
                       <th>Valor</th>
-                      <th>Selecionado</th>
+                      <th>Qtde</th>
                       <td>Total</td>
                       <th>Ações</th>
                     </tr>
@@ -404,7 +481,7 @@
 
         </div>
       </div>
-      
+      <p></p>
         </main>
 
         <footer>

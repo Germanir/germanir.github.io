@@ -13,7 +13,7 @@ html,body {
    header {
      background: #D2691E;
      grid-area: header;
-     height: 15vh;
+     display: block;
      color: white;
    }
    

@@ -1,0 +1,14 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.text-red {
+    color:red;
+}
+
+.text-green {
+    color:green;
+}
+
+ol {
+    margin-left:  100px;
+}

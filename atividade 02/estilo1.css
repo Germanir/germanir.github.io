@@ -1,0 +1,17 @@
+body {
+    background-color: white;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+h1 {
+    color: red;
+}
+
+p {
+    color: blue;
+}
+
+li:hover{
+text-decoration: underline;
+font-weight: bold;
+}

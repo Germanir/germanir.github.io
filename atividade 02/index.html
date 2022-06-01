@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página com vários estilos</title>
+    <link rel="stylesheet" href="estilo1.css" />
+    <link rel="stylesheet" href="estilo2.css" />
+    <link rel="stylesheet" href="estilo3.css" />
+    <link rel="stylesheet" href="estilo4.css" />
+    <link rel="stylesheet" href="estilo5.css" />
+
+</head>
+<body>
+<script>
+function ready(callback){
+    document.addEventListener("DOMContentLoaded",callback);
+} // end function
+
+
+function noStyle() {
+            document.styleSheets[0].disabled = true;
+            document.styleSheets[1].disabled = true;
+            document.styleSheets[2].disabled = true;
+            document.styleSheets[3].disabled = true;
+            document.styleSheets[4].disabled = true;
+        }
+
+        function onStyle(n) {
+            noStyle();
+            document.styleSheets[n].disabled = false;
+        }
+
+
+
+ready(function(){
+
+    //alert("carregou");
+
+    
+        onStyle(0);
+
+
+
+
+});
+
+</script>
+
+    <h1>Título</h1>
+    <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Possimus, et, hic facilis excepturi, consequatur culpa atque rerum quis totam earum adipisci? Beatae nemo hic molestias fuga neque ut a! Minus?
+    </p>
+
+
+    <ul>
+        <li class="item-menu" onclick="onStyle(0)" >Folha de estilo 1</li>
+        <li class="item-menu" onclick="onStyle(1)" >Folha de estilo 2</li>
+        <li class="item-menu" onclick="onStyle(2)" >Folha de estilo 3</li>
+        <li class="item-menu" onclick="onStyle(3)" >Folha de estilo 4</li>
+        <li class="item-menu" onclick="onStyle(4)" >Folha de estilo 5</li>
+        <li class="item-menu" onclick="noStyle()" >Sem folha de estilo</li>
+    </ul>
+
+
+    
+</body>
+</html>

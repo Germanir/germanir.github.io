@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dicionário</title>
+</head>
+<body>
+    <script>
+
+        function ready(callback){
+            if (document.readyState!='loading') callback();
+    // modern browsers
+    else if (document.addEventListener) document.addEventListener('DOMContentLoaded', callback);
+    // IE <= 8
+    else document.attachEvent('onreadystatechange', function(){
+        if (document.readyState=='complete') callback();
+    });
+    }
+        
+
+    function buscar(){
+
+        let pal = document.getElementById("palavra");
+        getDicionario(pal.value);
+
+
+    } // end buscar
+
+    
+    function getDicionario(palavra){
+            let xhttp = new XMLHttpRequest();
+            xhttp.open("GET", `https://api.dicionario-aberto.net/word/${palavra}`);
+            xhttp.onload = function () {
+                //console.log(this.responseText);
+                //let retorno = JSON.parse(this.responseText);
+                let retorno =  JSON.parse(this.responseText);
+                
+                /*console.log(retorno.processoSaida[0].dataRegistro[0]._text);
+
+                let option = "";
+                for (const i in retorno) {
+                    option += `<option value="${retorno[i].sigla}">${retorno[i].nome}</option>`;
+                }
+
+                option = `<option value="${retorno.processoSaida[0].dataRegistro[0]._text}">${retorno.processoSaida[0].dataRegistro[0]._text}</option>`;
+                
+                ;*/
+
+                document.getElementById("resultado").innerHTML = retorno[0].xml;
+
+            }
+            xhttp.send();
+    }
+
+    ready(function(){
+
+        //alert('carregou');
+
+
+
+    }); // end ready
+
+
+    </script>
+
+    <input type="text" id="palavra"> <button onclick="buscar()">Buscar</button>
+    <span id="resultado"></span>
+
+
+    
+</body>
+</html>

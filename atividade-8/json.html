@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <title>Aula dia 04.04</title>
+</head>
+
+<body>
+
+    <script type="text/javascript" src="xmlToJSON.js"></script>
+
+    <button onclick="exemploAjax()">Carregar as regiões!</button>
+    <script>
+
+testString = '<xml><a>It Works!</a></xml>';   // get some xml (string or document/node)
+result = xmlToJSON.parseString(testString);   // parse
+//console.log(result);
+
+        function exemploAjax() {
+            let xhttp = new XMLHttpRequest();
+            xhttp.open("GET", "https://servicodados.ibge.gov.br/api/v1/localidades/regioes");
+            xhttp.onload = function () {
+                document.write(this.responseText);
+            }
+            xhttp.send();
+        }
+        // exemploAjax();
+    </script>
+
+
+
+    <script>
+
+        function getGedoc(nup){
+            let xhttp = new XMLHttpRequest();
+            xhttp.open("GET", `https://sistemas.caesb.df.gov.br/gdoc/app/rest/visualizarProcesso/pesquisarProcesso.xml?numeroUnicoProtocolo=${nup}`);
+            xhttp.onload = function () {
+                //console.log(this.responseText);
+                //let retorno = JSON.parse(this.responseText);
+                let retorno = xmlToJSON.parseString(this.responseText);
+                
+                console.log(retorno.processoSaida[0].dataRegistro[0]._text);
+
+                let option = "";
+                for (const i in retorno) {
+                    option += `<option value="${retorno[i].sigla}">${retorno[i].nome}</option>`;
+                }
+
+                option = `<option value="${retorno.processoSaida[0].dataRegistro[0]._text}">${retorno.processoSaida[0].dataRegistro[0]._text}</option>`;
+                
+                document.getElementById("GDOC").innerHTML = option;
+            }
+            xhttp.send();
+        }
+
+        getGedoc("00092-00019588/2022-22");
+
+        function carregarListaUf(regiao) {
+            let xhttp = new XMLHttpRequest();
+            xhttp.open("GET", `https://servicodados.ibge.gov.br/api/v1/localidades/regioes/${regiao}/estados?orderBy=nome`);
+            xhttp.onload = function () {
+                let retorno = JSON.parse(this.responseText);
+                let option = "";
+                for (const i in retorno) {
+                    option += `<option value="${retorno[i].sigla}">${retorno[i].nome}</option>`;
+                }
+                document.getElementById("ls-uf").innerHTML = option;
+            }
+            xhttp.send();
+        }
+
+        function carregarListaMunicipios(uf){
+            let xhttp = new XMLHttpRequest();
+            xhttp.open("GET",`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`);
+
+            xhttp.onload = function () {
+                let retorno = JSON.parse(this.responseText);
+                let option = "";
+                for (const i in retorno){
+                    option += `<option value="${retorno[i].id}">${retorno[i].nome}</option>`;
+                }
+                document.getElementById("ls-municipio").innerHTML = option;
+
+            }
+            xhttp.send();
+        }
+
+        function carregarListaRegiao() {
+            let xhttp = new XMLHttpRequest();
+            xhttp.open("GET", "https://servicodados.ibge.gov.br/api/v1/localidades/regioes");
+            xhttp.onload = function () {
+                let retorno = JSON.parse(this.responseText);
+                let option = `<option value="">Selecione</option>`;
+                for (const i in retorno) {
+                    option += `<option value="${retorno[i].id}">${retorno[i].nome}</option>`;
+                }
+                document.getElementById("ls-regiao").innerHTML = option;
+            }
+            xhttp.send();
+        }
+        carregarListaRegiao();
+    </script>
+
+    <div class="container">
+        <div class="form-group col-sm-3">
+            <label for="ls-regiao">Regiao:</label>
+            <select class="form-control" name="ls-regiao" id="ls-regiao" onchange="carregarListaUf(this.value)">
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="form-group col-sm-3">
+            <label for="ls-uf">UF:</label>
+            <select class="form-control" name="ls-uf" id="ls-uf" onchange="carregarListaMunicipios(this.value)">
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="form-group col-sm-3">
+            <label for="ls-municipio">Municipio:</label>
+            <select class="form-control" name="ls-municipio" id="ls-municipio">
+                <option value=""></option>
+            </select>
+        </div>
+        <!-- <button type="submit" class="btn btn-default">Submit</button> -->
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="sm-12">
+                <div class="d-flex">
+                    <div class="card">
+                        <div class="cardHeader">GDOC</div>
+                        <div class="card-body">
+                            <div class="form-group col-sm-3">
+                                <label for="ls-municipio">Processo:</label>
+                                <select class="form-control" name="GDOC" id="GDOC">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

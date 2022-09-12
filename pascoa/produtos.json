@@ -1,0 +1,32 @@
+[
+    {
+        "id" : 1,
+        "produto" : "Chocolate 01",
+        "descricao" : "Chocolate com castanhas",
+        "valor" : 55,
+        "foto" : "1.png"
+    },
+
+    {
+        "id" : 2,
+        "produto" : "Chocolate 02",
+        "descricao" : "Chocolate com uvas",
+        "valor" : 55,
+        "foto" : "2.png"
+    },
+    {
+        "id" : 3,
+        "produto" : "Chocolate 03",
+        "descricao" : "Chocolate com uvas passas",
+        "valor" : 55,
+        "foto" : "3.png"
+    },
+    {
+        "id" : 4,
+        "produto" : "Chocolate 04",
+        "descricao" : "Chocolate com laranja",
+        "valor" : 55,
+        "foto" : "4.png"
+    }
+
+]

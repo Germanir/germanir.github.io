@@ -51,6 +51,7 @@ public class ProdutoController {
     @GetMapping(path = "/selecionar/{id}")
     public @ResponseBody Optional<Produto> selecionar(@PathVariable int id){
         return repository.findById(id);
+        
     }
 
     

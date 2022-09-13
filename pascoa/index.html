@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChocoMania.com.br</title>
+    <link rel="stylesheet" href="estilo.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto" media="screen">
+
+</head>
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+
+        $(document).ready(function(){
+          let produtosCarrinho = [];
+          let produtos = JSON.parse('[\
+    {\
+        "id" : 1,\
+        "produto" : "Chocolate 01",\
+        "descricao" : "Chocolate com castanhas",\
+        "valor" : 55,\
+        "foto" : "1.png"\
+    },\
+    {\
+        "id" : 2,\
+        "produto" : "Chocolate 02",\
+        "descricao" : "Chocolate com uvas",\
+        "valor" : 5,\
+        "foto" : "2.png"\
+    },\
+    {\
+        "id" : 3,\
+        "produto" : "Chocolate 03",\
+        "descricao" : "Chocolate com uvas passas",\
+        "valor" : 35,\
+        "foto" : "3.png"\
+    },\
+    {\
+        "id" : 4,\
+        "produto" : "Chocolate 04",\
+        "descricao" : "Chocolate com laranja",\
+        "valor" : 60,\
+        "foto" : "4.png"\
+    }\
+]');
+
+          function buscarListaProduto() {
+                let ajax = new XMLHttpRequest();
+                ajax.open("GET", "produtos.json");
+                ajax.send();
+                ajax.onload = function () {
+                  produtos = JSON.parse(this.response);
+                   
+                }
+          }
+
+
+
+ function retornaProduto(id){
+
+        let produto = [];
+
+        for (const p of produtos) {
+
+                  
+            if (parseInt(p.id) == parseInt(id)) {
+
+              produto.id = p.id;
+              produto.produto = p.produto;
+              produto.descricao = p.descricao;
+              produto.valor = p.valor;
+              produto.foto = p.valor;
+
+              return produto;
+              
+              break;
+            } // end if
+
+        } // end for
+
+} // end function
+
+
+          
+           // $(".navbar-toggler").trigger("click");
+
+           //console.log("val " + produtos);
+
+           function carregarInicial() {
+
+         
+           $("#listaProdutos").find("tbody").find("tr").remove();
+           
+            for (const p of produtos) {
+
+            
+
+            
+
+            $("#listaProdutos").find("tbody").append(`<tr>\
+              <td><img src='imgs/${p.foto}' class='img-fluid'></td>\
+              <td>${p.produto} : ${p.descricao}</td>\
+              <td>${p.valor}</td>\
+              <td><input type='number' id='${p.id}.valorSelecionado' value='0' class='form-control' disabled=true /></td>\
+              <td><input type='text' id='${p.id}.totalSelecionado' value='0' class='form-control' disabled=true /></td>\
+                        <td>\
+                          <button class='btn btn-success' id='${p.id}.add'>+</button>\
+                          <button class='btn btn-danger' id='${p.id}.rem'>-</button>\
+                        \
+                        </td>\
+              </tr>`);
+
+            }
+
+          } // end function carregar inicial
+
+          carregarInicial();
+
+       $("html").on("click","button[id$='add']",function() {
+
+                let id = $(this).prop("id").replace(".add","");
+            
+                let atual = parseInt($("#" + id + "\\.valorSelecionado").val());
+
+                atual++;
+
+                $("#" + id + "\\.valorSelecionado").val(atual);
+
+                marcarSelecionados();
+
+
+         }); // end add click
+
+
+         $("html").on("click","button[id$='rem']",function() {
+
+              let id = $(this).prop("id").replace(".rem","");
+
+              let atual = parseInt($("#" + id + "\\.valorSelecionado").val());
+
+              if (atual > 0) {
+
+                  atual--;
+
+                  $("#" + id + "\\.valorSelecionado").val(atual);
+
+                  
+
+              }
+
+              marcarSelecionados();
+
+          }); // end add rem
+
+
+          function marcarSelecionados() {
+
+            
+
+            $("input[id$='.valorSelecionado']").each(function(){
+              let id = $(this).prop("id").replace(".valorSelecionado","");
+               
+                if ($(this).val() != 0) {
+
+                      //console.log("v" + $(this).val());
+
+                      
+                      let qtde = parseFloat($(this).val());
+                      let valor = parseFloat($(this).parent().parent().find("td:eq(2)").text());
+
+
+                      $("#" + id + "\\.totalSelecionado").val(qtde * valor);
+
+                      $(this).parent().parent().addClass("marcado");
+
+                    
+
+
+                }else {
+
+                      $(this).parent().parent().removeClass("marcado");
+                      $("#" + id + "\\.totalSelecionado").val(0);
+
+                }
+              
+
+            }); // end each
+
+
+           }; // end function marcar
+
+           function montarCarrinho(){
+            $("#confirmacao").find(".modal-body").html("");
+
+            produtosCarrinho = [];
+
+            $("input[id$='.valorSelecionado']").each(function(){
+              
+                  if ($(this).val() != 0) {
+
+                    let id = $(this).prop("id").replace(".valorSelecionado","");
+
+                    let produto = retornaProduto(id);
+                    produto.total = $("#" + id + "\\.totalSelecionado").val();
+                    produto.quantidade = $("#" + id + "\\.valorSelecionado").val();
+
+                    produtosCarrinho.push(produto);
+
+
+                    $("#confirmacao").find(".modal-body").append("<p><mark>" + produto.produto + " : " + produto.descricao + "</mark> Valor Total: <mark>" + $("#" + id + "\\.totalSelecionado").val() +"</mark></p>");
+
+                  }
+
+
+
+            });
+
+            if (produtosCarrinho.length <= 0){
+                  
+                $("#confirmacao").find(".modal-body").html("<p><mark>Nenhum produto selecionado</mark></p>");
+                $("#simFinal").prop("disabled",true);
+
+            }else{
+                $("#simFinal").prop("disabled",false);
+            }
+
+          }// end function
+
+
+          $("#preCart").hover(function() {
+
+            
+            montarCarrinho();
+
+          });
+
+          $("#simFinal").click(function(){
+
+            $("#confirmacao").modal('hide');
+
+                if (produtosCarrinho.length > 0){
+
+                        $("#cart").removeClass("btn-secondary");
+                        $("#cart").addClass("btn-success");
+
+                          
+                        $("#cart").append(`<span id="cartl">(${produtosCarrinho.length})</span>`);
+
+                        let montarTabela = "<table class='table table-info'><thead><tr><th>Produto</th><th>Total</th></tr><tbody>";
+
+                        for (const p of produtosCarrinho){
+
+                         montarTabela += `<tr><td>${p.descricao}</td><td>${p.total}</td></tr>`;
+
+                        }
+                        montarTabela += "</tbody></table>";
+
+
+                        $("#carrinho").find(".modal-body").html(montarTabela + 'Nome: <input type="text" id="nome" class="form-control">Telefone: <input class="form-control" type="text" id="telefone">');
+
+
+                        $('html, body').animate({scrollTop: '0px'}, 300);
+                        $("#cart").hide(500);
+                        $("#cart").show(1000,function(){
+                          $(this).prepend("Carrinho atualizado");
+                          $(this).focus();
+                        });
+
+                        $(".card-header").filter(function(){
+                                  return $(this).text().trim().toLowerCase() === "produtos";
+                        }).find("input, button").prop('disabled',true);
+                        
+              }else {
+                        $("#cart").removeClass("btn-success");
+                        $("#cart").addClass("btn-secondary");
+                        $("#cartl").remove();
+
+              }
+
+          }); // end simFinal click
+
+
+          $("#enviarFinal").hover(function(){
+
+           let nome = $("#nome").val();
+           let telefone = $("#telefone").val();
+
+                  if (nome.length == 0){
+                    $("#enviarFinal").prop("disabled",true);
+                    $("#nome").css("border", "2px solid red");
+
+                  } // end nome
+
+                  if (telefone.length == 0){
+                    $("#enviarFinal").prop("disabled",true);
+                    $("#telefone").css("border", "2px solid red");
+
+                  } // end nome
+                  
+
+          }); // end hover
+
+
+$("html").on("hover, blur","#nome, #telefone, #carrinho", function() {
+
+            let nome = $("#nome").val();
+           let telefone = $("#telefone").val();
+
+                  if (nome.length == 0){
+                    $("#enviarFinal").prop("disabled",true);
+                    $("#nome").css("border", "2px solid red");
+
+                  }else {
+                    $("#enviarFinal").prop("disabled",false);
+                    $("#nome").css("border", "2px solid green");
+                  } // end nome
+
+                  if (telefone.length == 0){
+                    $("#enviarFinal").prop("disabled",true);
+                    $("#telefone").css("border", "2px solid red");
+
+                  } else {
+                    $("#enviarFinal").prop("disabled",false);
+                    $("#telefone").css("border", "2px solid green"); 
+                  }// end nome
+
+
+          });
+
+
+          $("#enviarFinal").click(function(){
+
+            $("#carrinho").modal("hide");
+
+            let numero = $("#telefone").val();
+            let nome = $("#nome").val();
+            let pedido = `Olá meu nome é ${nome} (${numero}), desejo realizar o pedido abaixo:`;
+
+              for (const p of produtosCarrinho){
+                  pedido += `Produto_${p.id}_${p.descricao}_Qtde_${p.quantidade}`;
+              }
+
+              link = "https://wa.me/5561985355256?text=" + encodeURI(pedido);
+              window.open(link,'_blank');
+
+              $(".card-header").filter(function(){
+                    return $(this).text().trim().toLowerCase() === "produtos";
+              }).parent().parent().parent().css({"background":"green","color":"white"})
+              .prepend('<p class="text-center"><br><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-check" viewBox="0 0 16 16">  <path fill-rule="evenodd" d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>   <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/></svg><br>Obrigado pelo pedido!</p>');
+
+
+$("#cart").removeClass("btn-success");
+$("#cart").addClass("btn-secondary");
+$("#cartl").remove();
+$("#cart").html('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16"><path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"></path></svg>')
+
+
+carregarInicial();          
+
+          });
+
+
+          
+
+
+        }); // end ready
+
+    </script>
+
+    <div class="principal">
+        <header>
+        
+            <div class="container text-center">
+                <h3 class="display-2">ChocoMania.com.br</h3>
+                <figure>
+                    <blockquote class="blockquote">
+                      <p>A melhor maneira de saborear um delicioso chocolate.</p>
+                    </blockquote>
+                    <figcaption class="blockquote-footer">
+                      Entrega grátis em <cite title="Source Title">Brasília-DF</cite>
+                    </figcaption>
+                  </figure>
+            </div>
+
+
+                
+
+        </header>
+
+        
+        <div class="menu w-100">
+      
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                  <a class="navbar-brand" href="#">ChocoMania</a>
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Quem somos</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Pedido online</a>
+                      </li>
+
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Contato</a>
+                      </li>
+                      
+                    </ul>
+                    <form class="d-flex">
+                      <button class="btn btn-secondary" type="button" id="cart" data-bs-toggle="modal" data-bs-target="#carrinho">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
+                          <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                        </svg>
+                        </button>
+                    </form>
+                  </div>
+                </div>
+              </nav>
+
+        </div>
+
+
+        <main>
+          <p></p>
+<div class="container">
+  <div class="row">
+
+        
+              <div class="card ">
+                <div class="card-header">
+                  Produtos
+                </div>
+                <div class="card-body">
+                  
+                  <table class="table table-striped" id="listaProdutos">
+                    <thead>
+                      <tr>
+                      <th>Foto</th>
+                      <th>Descrição</th>
+                      <th>Valor</th>
+                      <th>Qtde</th>
+                      <td>Total</td>
+                      <th>Ações</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                      
+                    </tbody>
+                  </table>
+
+
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-sm-9">
+
+                      </div>
+                      <div class="col-sm-3">
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmacao" id="preCart">
+
+                          Adicionar pedidos ao carrinho
+      
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  
+
+                  
+                </div>
+              </div>
+          </div>
+
+
+        </div>
+      </div>
+      <p></p>
+        </main>
+
+        <footer>
+
+            <div class="container h-100">
+                <div class="row h-100">
+                    <div class="d-flex justify-content-around align-content-center flex-wrap">
+                            <p> 
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
+                                    <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
+                                </svg>
+                                Política de Trocas / Devoluções
+                            </p>
+
+                            <p>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-boxes" viewBox="0 0 16 16">
+                                    <path d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434L7.752.066ZM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567L4.25 7.504ZM7.5 9.933l-2.75 1.571v3.134l2.75-1.571V9.933Zm1 3.134 2.75 1.571v-3.134L8.5 9.933v3.134Zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567-2.742 1.567Zm2.242-2.433V3.504L8.5 5.076V8.21l2.75-1.572ZM7.5 8.21V5.076L4.75 3.504v3.134L7.5 8.21ZM5.258 2.643 8 4.21l2.742-1.567L8 1.076 5.258 2.643ZM15 9.933l-2.75 1.571v3.134L15 13.067V9.933ZM3.75 14.638v-3.134L1 9.933v3.134l2.75 1.571Z"/>
+                                </svg>
+                                Padrão de armazenamento e práticas de preparo
+                            </p>
+
+                            <p> 
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-building" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"/>
+                                    <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"/>
+                                </svg>
+                                Endereço físico
+
+                            </p>
+                            <p>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+                                    <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+                                </svg>
+                                Contato
+                            </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </footer>
+    
+    </div>
+
+    <!-- Modal -->
+<div class="modal fade" id="confirmacao" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Deseja incluir os pedidos abaixo?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="simFinal">Sim</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="carrinho" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Produtos selecionados</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="enviarFinal">Enviar pedido</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    
+</body>
+</html>

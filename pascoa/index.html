@@ -14,9 +14,20 @@
 
     <script>
 
+
+
         $(document).ready(function(){
           let produtosCarrinho = [];
-          let produtos = JSON.parse('[\
+          let produtos = [];
+
+        
+
+               
+               
+      
+              
+          
+          /*JSON.parse('[\
     {\
         "id" : 1,\
         "produto" : "Chocolate 01",\
@@ -45,19 +56,11 @@
         "valor" : 60,\
         "foto" : "4.png"\
     }\
-]');
+]');*/
 
-          function buscarListaProduto() {
-                let ajax = new XMLHttpRequest();
-                ajax.open("GET", "produtos.json");
-                ajax.send();
-                ajax.onload = function () {
-                  produtos = JSON.parse(this.response);
-                   
-                }
-          }
+         
 
-
+         
 
  function retornaProduto(id){
 
@@ -91,6 +94,17 @@
 
            function carregarInicial() {
 
+            let xhttp = new XMLHttpRequest();
+          xhttp.open("GET", "https://final-projeto.herokuapp.com/produto/");
+          xhttp.send();
+          xhttp.onload = function () {
+            produtos = this.response;
+    
+            produtos = JSON.parse(produtos);
+            console.log(produtos);
+                       
+          
+           
          
            $("#listaProdutos").find("tbody").find("tr").remove();
            
@@ -114,10 +128,11 @@
               </tr>`);
 
             }
+          } // end onload ajax
 
           } // end function carregar inicial
 
-          carregarInicial();
+          
 
        $("html").on("click","button[id$='add']",function() {
 
@@ -365,7 +380,7 @@ carregarInicial();
 
           
 
-
+          carregarInicial();
         }); // end ready
 
     </script>
